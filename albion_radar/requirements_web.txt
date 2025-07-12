@@ -1,0 +1,12 @@
+# Web Interface Dependencies for Albion Radar
+
+# Flask and extensions
+Flask>=2.3.0
+Flask-SocketIO>=5.3.0
+
+# Network and system dependencies
+psutil>=5.9.0
+scapy>=2.5.0
+
+# Development dependencies (optional)
+python-socketio>=5.8.0 

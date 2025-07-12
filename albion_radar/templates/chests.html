@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Chests & Dungeons - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="chestsSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Chests & Dungeons Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure chest and dungeon display settings for the radar.
+        </p>
+    </div>
+
+    <!-- Chest Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Chest Types
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Green Chests -->
+            <div class="flex items-center">
+                <input type="checkbox" id="chest_green" x-model="settings.chest_green" 
+                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                <label for="chest_green" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Green Chests
+                </label>
+            </div>
+
+            <!-- Blue Chests -->
+            <div class="flex items-center">
+                <input type="checkbox" id="chest_blue" x-model="settings.chest_blue" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="chest_blue" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Blue Chests
+                </label>
+            </div>
+
+            <!-- Purple Chests -->
+            <div class="flex items-center">
+                <input type="checkbox" id="chest_purple" x-model="settings.chest_purple" 
+                       class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                <label for="chest_purple" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Purple Chests
+                </label>
+            </div>
+
+            <!-- Yellow Chests -->
+            <div class="flex items-center">
+                <input type="checkbox" id="chest_yellow" x-model="settings.chest_yellow" 
+                       class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50">
+                <label for="chest_yellow" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Yellow Chests
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dungeon Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Dungeon Types
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Solo Dungeons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="dungeon_solo" x-model="settings.dungeon_solo" 
+                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                <label for="dungeon_solo" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Solo Dungeons
+                </label>
+            </div>
+
+            <!-- Group Dungeons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="dungeon_group" x-model="settings.dungeon_group" 
+                       class="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                <label for="dungeon_group" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Group Dungeons
+                </label>
+            </div>
+
+            <!-- Corrupted Dungeons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="dungeon_corrupted" x-model="settings.dungeon_corrupted" 
+                       class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                <label for="dungeon_corrupted" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Corrupted Dungeons
+                </label>
+            </div>
+
+            <!-- Hellgate Dungeons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="dungeon_hellgate" x-model="settings.dungeon_hellgate" 
+                       class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                <label for="dungeon_hellgate" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Hellgate Dungeons
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dungeon Enchant Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Dungeon Enchant Filters
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <template x-for="enchant in 5" :key="enchant">
+                <div class="flex items-center">
+                    <input type="checkbox" :id="`dungeon_enchant_${enchant-1}`" 
+                           x-model="settings.dungeon_enchants[enchant-1]"
+                           class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <label :for="`dungeon_enchant_${enchant-1}`" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300" x-text="`E${enchant-1}`"></label>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Mist Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Mist Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Solo Mists -->
+            <div class="flex items-center">
+                <input type="checkbox" id="mist_solo" x-model="settings.mist_solo" 
+                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                <label for="mist_solo" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Solo Mists
+                </label>
+            </div>
+
+            <!-- Duo Mists -->
+            <div class="flex items-center">
+                <input type="checkbox" id="mist_duo" x-model="settings.mist_duo" 
+                       class="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                <label for="mist_duo" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Duo Mists
+                </label>
+            </div>
+
+            <!-- Wisp Cage -->
+            <div class="flex items-center">
+                <input type="checkbox" id="wisp_cage" x-model="settings.wisp_cage" 
+                       class="rounded border-gray-300 text-magenta-600 shadow-sm focus:border-magenta-300 focus:ring focus:ring-magenta-200 focus:ring-opacity-50">
+                <label for="wisp_cage" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Wisp Cages
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mist Enchant Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Mist Enchant Filters
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <template x-for="enchant in 5" :key="enchant">
+                <div class="flex items-center">
+                    <input type="checkbox" :id="`mist_enchant_${enchant-1}`" 
+                           x-model="settings.mist_enchants[enchant-1]"
+                           class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <label :for="`mist_enchant_${enchant-1}`" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300" x-text="`E${enchant-1}`"></label>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('chestsSettings', () => ({
+        settings: {
+            chest_green: false,
+            chest_blue: false,
+            chest_purple: false,
+            chest_yellow: false,
+            dungeon_solo: false,
+            dungeon_group: false,
+            dungeon_corrupted: false,
+            dungeon_hellgate: false,
+            dungeon_enchants: [false, false, false, false, false],
+            mist_solo: false,
+            mist_duo: false,
+            mist_enchants: [false, false, false, false, false],
+            wisp_cage: false
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

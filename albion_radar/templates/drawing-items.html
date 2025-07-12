@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+
+{% block title %}Drawing Items - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="drawingItemsSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Drawing Items Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure item display and drawing settings for the radar.
+        </p>
+    </div>
+
+    <!-- Item Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Item Display Options
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Show Item Names -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_item_names" x-model="settings.show_item_names" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_item_names" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Item Names
+                </label>
+            </div>
+
+            <!-- Show Item Icons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_item_icons" x-model="settings.show_item_icons" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_item_icons" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Item Icons
+                </label>
+            </div>
+
+            <!-- Show Item Enchant -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_item_enchant" x-model="settings.show_item_enchant" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_item_enchant" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Item Enchant Level
+                </label>
+            </div>
+
+            <!-- Show Item Quality -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_item_quality" x-model="settings.show_item_quality" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_item_quality" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Item Quality
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Filter Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Item Filter Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Filter by Tier -->
+            <div class="flex items-center space-x-2">
+                <label for="min_item_tier" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Min Tier:
+                </label>
+                <input type="number" id="min_item_tier" x-model="settings.min_item_tier" min="1" max="8"
+                       class="w-20 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Filter by Enchant -->
+            <div class="flex items-center space-x-2">
+                <label for="min_item_enchant" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Min Enchant:
+                </label>
+                <input type="number" id="min_item_enchant" x-model="settings.min_item_enchant" min="0" max="4"
+                       class="w-20 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Filter by Quality -->
+            <div class="flex items-center space-x-2">
+                <label for="min_item_quality" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Min Quality:
+                </label>
+                <select id="min_item_quality" x-model="settings.min_item_quality"
+                        class="rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="0">Normal</option>
+                    <option value="1">Good</option>
+                    <option value="2">Outstanding</option>
+                    <option value="3">Excellent</option>
+                    <option value="4">Masterpiece</option>
+                </select>
+            </div>
+
+            <!-- Show Only Legendary -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_only_legendary" x-model="settings.show_only_legendary" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_only_legendary" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Only Legendary Items
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Categories -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Item Categories
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Weapons -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_weapons" x-model="settings.show_weapons" 
+                       class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                <label for="show_weapons" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Weapons
+                </label>
+            </div>
+
+            <!-- Armor -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_armor" x-model="settings.show_armor" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_armor" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Armor
+                </label>
+            </div>
+
+            <!-- Accessories -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_accessories" x-model="settings.show_accessories" 
+                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                <label for="show_accessories" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Accessories
+                </label>
+            </div>
+
+            <!-- Consumables -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_consumables" x-model="settings.show_consumables" 
+                       class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50">
+                <label for="show_consumables" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Consumables
+                </label>
+            </div>
+
+            <!-- Materials -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_materials" x-model="settings.show_materials" 
+                       class="rounded border-gray-300 text-gray-600 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50">
+                <label for="show_materials" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Materials
+                </label>
+            </div>
+
+            <!-- Artifacts -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_artifacts" x-model="settings.show_artifacts" 
+                       class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                <label for="show_artifacts" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Artifacts
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Display Style -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Item Display Style
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Display Style -->
+            <div class="flex items-center space-x-2">
+                <label for="item_display_style" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Display Style:
+                </label>
+                <select id="item_display_style" x-model="settings.item_display_style"
+                        class="rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="dots">Dots</option>
+                    <option value="icons">Icons</option>
+                    <option value="text">Text Only</option>
+                    <option value="mixed">Mixed</option>
+                </select>
+            </div>
+
+            <!-- Item Size -->
+            <div class="flex items-center space-x-2">
+                <label for="item_size" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Item Size:
+                </label>
+                <input type="range" id="item_size" x-model="settings.item_size" min="8" max="32" step="2"
+                       class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <span x-text="settings.item_size + 'px'" class="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('drawingItemsSettings', () => ({
+        settings: {
+            show_item_names: true,
+            show_item_icons: true,
+            show_item_enchant: true,
+            show_item_quality: true,
+            min_item_tier: 1,
+            min_item_enchant: 0,
+            min_item_quality: 0,
+            show_only_legendary: false,
+            show_weapons: true,
+            show_armor: true,
+            show_accessories: true,
+            show_consumables: false,
+            show_materials: false,
+            show_artifacts: true,
+            item_display_style: 'mixed',
+            item_size: 16
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

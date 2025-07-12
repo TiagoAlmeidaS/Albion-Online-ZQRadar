@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}Map - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="mapSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Map Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure map display and navigation settings for the radar.
+        </p>
+    </div>
+
+    <!-- Map Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Map Display Options
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Show Map -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_map" x-model="settings.show_map" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_map" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Map Background
+                </label>
+            </div>
+
+            <!-- Show Map Grid -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_map_grid" x-model="settings.show_map_grid" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_map_grid" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Map Grid
+                </label>
+            </div>
+
+            <!-- Show Map Labels -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_map_labels" x-model="settings.show_map_labels" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_map_labels" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Map Labels
+                </label>
+            </div>
+
+            <!-- Show Map Roads -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_map_roads" x-model="settings.show_map_roads" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_map_roads" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Map Roads
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Zoom Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Map Zoom Settings
+        </h3>
+        
+        <div class="space-y-4">
+            <!-- Zoom Level -->
+            <div class="flex items-center space-x-4">
+                <label for="map_zoom" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Zoom Level:
+                </label>
+                <input type="range" id="map_zoom" x-model="settings.map_zoom" min="1" max="10" step="0.5"
+                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <span x-text="settings.map_zoom" class="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]"></span>
+            </div>
+
+            <!-- Auto Zoom -->
+            <div class="flex items-center">
+                <input type="checkbox" id="auto_zoom" x-model="settings.auto_zoom" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="auto_zoom" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Auto Zoom to Player
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Center Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Map Center Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Center on Player -->
+            <div class="flex items-center">
+                <input type="checkbox" id="center_on_player" x-model="settings.center_on_player" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="center_on_player" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Center Map on Player
+                </label>
+            </div>
+
+            <!-- Follow Player -->
+            <div class="flex items-center">
+                <input type="checkbox" id="follow_player" x-model="settings.follow_player" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="follow_player" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Follow Player Movement
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Style Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Map Style Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Map Style -->
+            <div class="flex items-center space-x-2">
+                <label for="map_style" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Map Style:
+                </label>
+                <select id="map_style" x-model="settings.map_style"
+                        class="rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="default">Default</option>
+                    <option value="satellite">Satellite</option>
+                    <option value="terrain">Terrain</option>
+                    <option value="minimal">Minimal</option>
+                </select>
+            </div>
+
+            <!-- Map Opacity -->
+            <div class="flex items-center space-x-2">
+                <label for="map_opacity" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Map Opacity:
+                </label>
+                <input type="range" id="map_opacity" x-model="settings.map_opacity" min="0" max="100" step="10"
+                       class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <span x-text="settings.map_opacity + '%'" class="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('mapSettings', () => ({
+        settings: {
+            show_map: true,
+            show_map_grid: false,
+            show_map_labels: true,
+            show_map_roads: true,
+            map_zoom: 5.0,
+            auto_zoom: false,
+            center_on_player: true,
+            follow_player: true,
+            map_style: 'default',
+            map_opacity: 70
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

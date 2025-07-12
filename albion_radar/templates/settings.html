@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="generalSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            General Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure general radar settings and preferences.
+        </p>
+    </div>
+
+    <!-- Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Display Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Dark Mode -->
+            <div class="flex items-center">
+                <input type="checkbox" id="dark_mode" x-model="settings.dark_mode" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="dark_mode" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Dark Mode
+                </label>
+            </div>
+
+            <!-- Show Coordinates -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_coordinates" x-model="settings.show_coordinates" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_coordinates" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Coordinates
+                </label>
+            </div>
+
+            <!-- Show Grid -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_grid" x-model="settings.show_grid" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_grid" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Grid
+                </label>
+            </div>
+
+            <!-- Show Compass -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_compass" x-model="settings.show_compass" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_compass" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Compass
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Alert Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Sound Alerts -->
+            <div class="flex items-center">
+                <input type="checkbox" id="sound_alerts" x-model="settings.sound_alerts" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="sound_alerts" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Enable Sound Alerts
+                </label>
+            </div>
+
+            <!-- Visual Alerts -->
+            <div class="flex items-center">
+                <input type="checkbox" id="visual_alerts" x-model="settings.visual_alerts" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="visual_alerts" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Enable Visual Alerts
+                </label>
+            </div>
+
+            <!-- Alert Volume -->
+            <div class="flex items-center space-x-2">
+                <label for="alert_volume" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Alert Volume:
+                </label>
+                <input type="range" id="alert_volume" x-model="settings.alert_volume" min="0" max="100" step="10"
+                       class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                <span x-text="settings.alert_volume + '%'" class="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Performance Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Update Rate -->
+            <div class="flex items-center space-x-2">
+                <label for="update_rate" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Update Rate (ms):
+                </label>
+                <input type="number" id="update_rate" x-model="settings.update_rate" min="100" max="5000" step="100"
+                       class="w-24 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Max Distance -->
+            <div class="flex items-center space-x-2">
+                <label for="max_distance" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Max Distance:
+                </label>
+                <input type="number" id="max_distance" x-model="settings.max_distance" min="100" max="2000" step="50"
+                       class="w-24 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+
+            <!-- Auto Cleanup -->
+            <div class="flex items-center">
+                <input type="checkbox" id="auto_cleanup" x-model="settings.auto_cleanup" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="auto_cleanup" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Auto Cleanup Old Data
+                </label>
+            </div>
+
+            <!-- Cleanup Interval -->
+            <div class="flex items-center space-x-2">
+                <label for="cleanup_interval" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Cleanup Interval (s):
+                </label>
+                <input type="number" id="cleanup_interval" x-model="settings.cleanup_interval" min="30" max="300" step="30"
+                       class="w-24 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+    </div>
+
+    <!-- Network Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Network Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Network Adapter -->
+            <div class="flex items-center space-x-2">
+                <label for="network_adapter" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Network Adapter:
+                </label>
+                <select id="network_adapter" x-model="settings.network_adapter"
+                        class="rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="auto">Auto Detect</option>
+                    <option value="manual">Manual Selection</option>
+                </select>
+            </div>
+
+            <!-- Port -->
+            <div class="flex items-center space-x-2">
+                <label for="network_port" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Port:
+                </label>
+                <input type="number" id="network_port" x-model="settings.network_port" min="1" max="65535"
+                       class="w-24 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('generalSettings', () => ({
+        settings: {
+            dark_mode: false,
+            show_coordinates: true,
+            show_grid: false,
+            show_compass: true,
+            sound_alerts: true,
+            visual_alerts: true,
+            alert_volume: 50,
+            update_rate: 1000,
+            max_distance: 1000,
+            auto_cleanup: true,
+            cleanup_interval: 60,
+            network_adapter: 'auto',
+            network_port: 5056
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

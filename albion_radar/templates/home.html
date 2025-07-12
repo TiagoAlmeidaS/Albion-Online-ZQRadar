@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Players - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="playersSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Players & PvP Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure player display settings and PvP options for the radar.
+        </p>
+    </div>
+
+    <!-- Player Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Player Display Options
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Player Dot -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_dot" x-model="settings.setting_dot" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_dot" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Player Dots
+                </label>
+            </div>
+
+            <!-- Player Names -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_nickname" x-model="settings.setting_nickname" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_nickname" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Player Names
+                </label>
+            </div>
+
+            <!-- Player Health -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_health" x-model="settings.setting_health" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_health" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Player Health
+                </label>
+            </div>
+
+            <!-- Player Mounted -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_mounted" x-model="settings.setting_mounted" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_mounted" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Mounted Status
+                </label>
+            </div>
+
+            <!-- Player Items -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_items" x-model="settings.setting_items" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_items" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Player Items
+                </label>
+            </div>
+
+            <!-- Player Distance -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_distance" x-model="settings.setting_distance" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_distance" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Distance
+                </label>
+            </div>
+
+            <!-- Player Guild -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_guild" x-model="settings.setting_guild" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_guild" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Guild Names
+                </label>
+            </div>
+
+            <!-- Player Sound -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_sound" x-model="settings.setting_sound" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_sound" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Play Sound Alerts
+                </label>
+            </div>
+
+            <!-- Player Flash -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_flash" x-model="settings.setting_flash" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_flash" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Flash on Detection
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Type Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Player Type Filters
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Passive Players -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_passive_players" x-model="settings.setting_passive_players" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_passive_players" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Passive Players
+                </label>
+            </div>
+
+            <!-- Faction Players -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_faction_players" x-model="settings.setting_faction_players" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_faction_players" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Faction Players
+                </label>
+            </div>
+
+            <!-- Dangerous Players -->
+            <div class="flex items-center">
+                <input type="checkbox" id="setting_dangerous_players" x-model="settings.setting_dangerous_players" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="setting_dangerous_players" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Dangerous Players
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scale Setting -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Radar Scale
+        </h3>
+        
+        <div class="flex items-center space-x-4">
+            <label for="scale" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Scale Factor:
+            </label>
+            <input type="range" id="scale" x-model="settings.scale" min="1" max="10" step="0.5"
+                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+            <span x-text="settings.scale" class="text-sm font-medium text-gray-900 dark:text-white min-w-[3rem]"></span>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('playersSettings', () => ({
+        settings: {
+            setting_dot: false,
+            setting_nickname: false,
+            setting_health: false,
+            setting_mounted: false,
+            setting_items: false,
+            setting_items_dev: false,
+            setting_distance: false,
+            setting_guild: false,
+            scale: 4.0,
+            setting_sound: false,
+            setting_flash: false,
+            setting_passive_players: false,
+            setting_faction_players: false,
+            setting_dangerous_players: false
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    // Show success message
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

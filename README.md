@@ -1,111 +1,213 @@
-[![Discord](https://img.shields.io/discord/1191823969167352039?style=for-the-badge&logo=discord&label=Discord)](https://discord.gg/XAWjmzeaD3)
-[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Zeldruck/Albion-Online-ZQRadar/main?style=for-the-badge&label=Last%20Commit)]()
-[![GitHub issues](https://img.shields.io/github/issues-raw/Zeldruck/Albion-Online-ZQRadar?style=for-the-badge&label=Issue)](https://github.com/Zeldruck/Albion-Online-ZQRadar/issues)
-[![GitHub Repo stars](https://img.shields.io/github/stars/Zeldruck/Albion-Online-ZQRadar?style=for-the-badge)]()
+# Albion Online ZQRadar - Python Version
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F1VMA9G)
+A complete Python port of the original Node.js Albion Online radar tool, providing real-time game data visualization and analysis.
 
-## ❓ What is ZQRadar?
+## 🚀 Features
 
-ZQRadar is a radar type tool for the game Albion Online.
-\
-Albion ZQRadar provides a real-time map, helping players detect other players, creatures, resources and more, nearby.
+### Core Functionality
+- **Real-time packet capture** from Albion Online network traffic
+- **Photon protocol parsing** for game data extraction
+- **Multi-adapter network support** with automatic detection
+- **Web-based interface** with real-time updates via WebSocket
 
-## 🎯 Features
+### Radar Detection
+- **Players**: Name, health, guild, equipment, distance, mounted status
+- **Mobs & Bosses**: Health, level, type, special enemies (Crystal Spider, Fairy Dragon, etc.)
+- **Resources**: All harvestable resources with tier/enchant filtering
+- **Chests & Dungeons**: Green, blue, purple, yellow chests and various dungeon types
+- **Fishing Spots**: Water-based resource locations
+- **Wisp Cages**: Special mist content
+- **Maps**: Interactive map with zoom and navigation
 
-- No injections, less risk of banning
-- Display a lot of information about other players (health, items, mounted or not, ...)
-- Display customizable resources (select tiers and enchantments for each)
-- Display customizable living resources (select tiers and enchantments for each)
-- Display customizable enemies
-- Display mist beasts
-- Display chests (types)
-- Display mist portals (solo/duo, enchantments)
-- Display dungeons (solo/duo, enchantments)
-- Display background map on radar
+### Advanced Features
+- **Ignore List Management**: Filter out specific players/guilds
+- **Settings Management**: Comprehensive configuration system
+- **Drawing Components**: Visual representation with color coding
+- **Sound Alerts**: Audio notifications for important events
+- **Dark Mode**: Modern UI with dark theme support
 
-And much more to come!
-\
-Join the [Discord](https://discord.gg/XAWjmzeaD3) to look at the to-do list and be informed when a new version is released.
+## 📦 Installation
 
-## 🔰 How to run (Windows)
+### Prerequisites
+- Python 3.8 or higher
+- Windows 10/11 (for network adapter access)
+- Albion Online installed and running
 
-1. Download Npcap:
-- [Npcap 1.79](https://npcap.com/dist/npcap-1.79.exe)
-2. Download the the latest release
-- [Releases](https://github.com/Zeldruck/Albion-Online-ZQRadar/releases)
-3. Open the radar and wait for the line:
+### Quick Start (Windows)
+1. **Download** the project files
+2. **Run** `_INSTALL_FINAL.bat` as Administrator
+3. **Run** `_RUN_FINAL.bat` to start the radar
+4. **Open** http://localhost:5000 in your browser
+
+### Manual Installation
+```bash
+# Install dependencies
+pip install flask flask-socketio scapy psutil
+
+# Run the web interface
+python -m albion_radar.web_interface
 ```
-Please select one of the adapter that you use to connect to the internet:
-  1. ******
-  2. ******
-  3. ******
 
-input the number here:
+## 🎮 Usage
+
+### Starting the Radar
+1. **Launch** Albion Online
+2. **Run** the radar application
+3. **Open** the web interface at http://localhost:5000
+4. **Configure** settings in the web interface
+5. **Start** packet capture from the main dashboard
+
+### Web Interface Pages
+- **Home** (`/home`): Player and PvP settings
+- **Resources** (`/resources`): Harvestable resource filters
+- **Enemies** (`/enemies`): Mob and boss detection settings
+- **Chests** (`/chests`): Chest and dungeon filters
+- **Settings** (`/settings`): General configuration
+- **Map** (`/map`): Map display settings
+- **Ignore List** (`/ignorelist`): Player/guild filtering
+- **Drawing Items** (`/drawing-items`): Item display settings
+
+## 🏗️ Architecture
+
+### Core Modules
 ```
-4. Choose the right adapter and enter the number (do not choose 127.0.0.1). 
-5. Authenticate yourself with discord.
-6. Click on the "Launch radar" button.
-7. You can now access the radar features by going to `http://localhost:5001` in your browser.
-
-## 👨‍💻 For the devs (Windows)
-
-1. Download Node.js v18.18.2:
-- [Node.js v18.18.2 (64-bit)](https://nodejs.org/dist/v18.18.2/node-v18.18.2-x64.msi)
-2. Download Npcap:
-- [Npcap 1.79](https://npcap.com/dist/npcap-1.79.exe)
-3. Download Python 3.10.2:
-- [Python 3.10.2 (64-bit)](https://www.python.org/ftp/python/3.10.2/python-3.10.2-amd64.exe)
-4. Download Windows Build Tools:
-- [Windows Build Tools](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools)
-- And select `Desktop development with C++` (the first one normally), and install
-5. Download the source code of the latest dev branch
-- [Branch](https://github.com/Zeldruck/Albion-Online-ZQRadar/tree/old-radar-dev)
-6. Run the following line:
+albion_radar/
+├── core/
+│   ├── radar.py              # Main radar engine
+│   ├── packet_capture.py     # Network packet capture
+│   ├── photon_parser.py      # Photon protocol parsing
+│   ├── network_adapter.py    # Network adapter management
+│   └── data_manager.py       # Data storage and management
+├── handlers/
+│   ├── players_handler.py    # Player data processing
+│   ├── mobs_handler.py       # Mob data processing
+│   ├── harvestables_handler.py # Resource processing
+│   ├── chests_handler.py     # Chest processing
+│   ├── dungeons_handler.py   # Dungeon processing
+│   ├── fishing_handler.py    # Fishing spot processing
+│   └── wisp_cage_handler.py # Wisp cage processing
+├── drawing/
+│   ├── base_drawing.py       # Base drawing functionality
+│   ├── players_drawing.py    # Player visualization
+│   ├── harvestables_drawing.py # Resource visualization
+│   ├── mobs_drawing.py       # Mob visualization
+│   ├── chests_drawing.py     # Chest visualization
+│   ├── dungeons_drawing.py   # Dungeon visualization
+│   ├── fishing_drawing.py    # Fishing visualization
+│   ├── wisp_cage_drawing.py  # Wisp cage visualization
+│   └── maps_drawing.py       # Map visualization
+├── models/
+│   ├── player.py             # Player data model
+│   ├── mob.py                # Mob data model
+│   ├── resource.py           # Resource data model
+│   ├── chest.py              # Chest data model
+│   └── dungeon.py            # Dungeon data model
+├── templates/                # Web interface templates
+├── web_interface.py          # Flask web application
+└── __init__.py              # Package initialization
 ```
-npm install
-```
-7. Run the following line:
-```
-node app.js
-```
-8. You should see this:
-```
-Please select one of the adapter that you use to connect to the internet:
-  1. ******
-  2. ******
-  3. ******
 
-input the number here:
+### Data Flow
+1. **Packet Capture** → Network adapter captures Albion traffic
+2. **Photon Parsing** → Protocol parser extracts game data
+3. **Handler Processing** → Specialized handlers process data types
+4. **Data Management** → Centralized data storage and retrieval
+5. **Drawing Components** → Visual representation generation
+6. **Web Interface** → Real-time display via WebSocket
+
+## ⚙️ Configuration
+
+### Settings Management
+All settings are stored in `radar_settings.json` and managed through the web interface:
+
+- **Player Settings**: Display options, filters, alerts
+- **Resource Settings**: Tier/enchant filters, resource types
+- **Enemy Settings**: Level filters, boss detection
+- **Chest Settings**: Type filters, enchant levels
+- **General Settings**: Performance, alerts, network
+- **Map Settings**: Display options, zoom, style
+
+### Ignore List
+Manage ignored players and guilds in `ignore_list.json`:
+- Add/remove individual players
+- Add/remove entire guilds
+- Automatic filtering during detection
+
+## 🔧 Development
+
+### Project Structure
 ```
-9. Choose the right adapter and enter the number. 
-10. You can now access the radar features by going to `http://localhost:5001` in your browser.
+Albion-Online-ZQRadar/
+├── albion_radar/            # Python module
+├── _INSTALL_FINAL.bat       # Windows installer
+├── _RUN_FINAL.bat          # Windows launcher
+├── README.md               # This file
+└── requirements_web.txt    # Python dependencies
+```
 
-## ✨ Image Packs
-**⚠️(This is not mandatory for the radar to work)⚠️**
-\
-You can download the Image Packs to enhance the radar.
-\
-\
-**Packs:**
-- **Ressource Pack v1.0**: Installed by default
-- **Items Pack v1.2**: [Link](https://github.com/Zeldruck/Albion-Online-ZQRadar/releases/tag/item-pack-v1.1)
-- **~~Animals & Harvestables Pack v0.0~~**: [Link](https://github.com/Zeldruck/Albion-Online-ZQRadar/releases/)
-- **~~Enemies Pack v0.0~~**: [Link](https://github.com/Zeldruck/Albion-Online-ZQRadar/releases/)
-- **Maps Pack v0.1**: [Link](https://github.com/Zeldruck/Albion-Online-ZQRadar/releases/tag/map-pack-v0.1)
+### Adding New Features
+1. **Create Handler**: Add new handler in `handlers/`
+2. **Create Model**: Add data model in `models/`
+3. **Create Drawing**: Add visualization in `drawing/`
+4. **Update Web Interface**: Add routes and templates
+5. **Update Settings**: Add configuration options
 
-\
-Once downloaded, exitract the folder into `Albion-Online-ZQRadar/images/`.
-\
-\
-Example:
-\
-If you have downloaded the Map Pack, you should have `Albion-Online-ZQRadar/images/Maps/*.png`.
+### Testing
+```bash
+# Run web interface in debug mode
+python -m albion_radar.web_interface
 
+# Test specific components
+python -c "from albion_radar.core.radar import Radar; print('Radar module loaded')"
+```
 
-## Credits
-[@Zeldruck](https://github.com/Zeldruck)
-\
-Based on [QRadar](https://github.com/FashionFlora/Albion-Online-Radar-QRadar) by [@FashionFlora](https://github.com/FashionFlora?)
-\
-Use of [photon-packet-parser](https://github.com/0xN0x/photon-packet-parser) to parse packets.
+## 🛡️ Security & Legal
+
+### Important Notes
+- **Educational Purpose**: This tool is for educational and research purposes
+- **Game Terms**: Use at your own risk and in accordance with Albion Online's Terms of Service
+- **Network Access**: Requires administrator privileges for packet capture
+- **Privacy**: Only captures Albion Online network traffic
+
+### Safety Features
+- **Local Only**: All data processed locally, no external transmission
+- **Configurable**: Full control over what data is captured and displayed
+- **Transparent**: Open source code for full transparency
+
+## 🤝 Contributing
+
+### How to Contribute
+1. **Fork** the repository
+2. **Create** a feature branch
+3. **Implement** your changes
+4. **Test** thoroughly
+5. **Submit** a pull request
+
+### Development Guidelines
+- Follow Python PEP 8 style guidelines
+- Add comprehensive docstrings
+- Include error handling
+- Test with different network configurations
+- Update documentation for new features
+
+## 📄 License
+
+This project is provided as-is for educational purposes. Use responsibly and in accordance with Albion Online's Terms of Service.
+
+## 🆘 Support
+
+### Common Issues
+1. **"No network adapters found"**: Run as Administrator
+2. **"Flask not found"**: Run `pip install flask flask-socketio`
+3. **"Permission denied"**: Run installer as Administrator
+4. **"No data detected"**: Ensure Albion Online is running
+
+### Getting Help
+- Check the web interface logs for error messages
+- Verify network adapter selection
+- Ensure Albion Online is actively running
+- Test with different network configurations
+
+---
+
+**🎮 Happy Hunting in Albion Online! 🎯**

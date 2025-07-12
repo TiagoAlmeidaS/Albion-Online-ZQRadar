@@ -1,0 +1,422 @@
+{% extends "base.html" %}
+
+{% block title %}Resources - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="resourcesSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Resources Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure harvestable resource display settings for the radar.
+        </p>
+    </div>
+
+    <!-- Resource Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Resource Display Options
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Resource Size -->
+            <div class="flex items-center">
+                <input type="checkbox" id="resource_size" x-model="settings.resource_size" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="resource_size" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Resource Size
+                </label>
+            </div>
+
+            <!-- Living Resources HP -->
+            <div class="flex items-center">
+                <input type="checkbox" id="living_resources_hp" x-model="settings.living_resources_hp" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="living_resources_hp" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Living Resource Health
+                </label>
+            </div>
+
+            <!-- Living Resources ID -->
+            <div class="flex items-center">
+                <input type="checkbox" id="living_resources_id" x-model="settings.living_resources_id" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="living_resources_id" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Living Resource IDs
+                </label>
+            </div>
+
+            <!-- Show Fish -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_fish" x-model="settings.show_fish" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_fish" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Fishing Spots
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Static Resources -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Static Resources
+        </h3>
+        
+        <div class="space-y-4">
+            <!-- Fiber -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Fiber</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`fiber_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_static_fiber[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                                    <label :for="`fiber_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Wood -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Wood</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`wood_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_static_wood[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50">
+                                    <label :for="`wood_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Hide -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Hide</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`hide_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_static_hide[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                                    <label :for="`hide_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Ore -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Ore</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`ore_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_static_ore[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-gray-600 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50">
+                                    <label :for="`ore_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Rock -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Rock</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`rock_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_static_rock[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-brown-600 shadow-sm focus:border-brown-300 focus:ring focus:ring-brown-200 focus:ring-opacity-50">
+                                    <label :for="`rock_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Living Resources -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Living Resources
+        </h3>
+        
+        <div class="space-y-4">
+            <!-- Living Fiber -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Living Fiber</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`living_fiber_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_living_fiber[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                                    <label :for="`living_fiber_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Living Wood -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Living Wood</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`living_wood_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_living_wood[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50">
+                                    <label :for="`living_wood_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Living Hide -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Living Hide</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`living_hide_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_living_hide[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-orange-600 shadow-sm focus:border-orange-300 focus:ring focus:ring-orange-200 focus:ring-opacity-50">
+                                    <label :for="`living_hide_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Living Ore -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Living Ore</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`living_ore_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_living_ore[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-gray-600 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50">
+                                    <label :for="`living_ore_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Living Rock -->
+            <div>
+                <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Living Rock</h4>
+                <div class="grid grid-cols-5 gap-2">
+                    <template x-for="enchant in 5" :key="enchant">
+                        <div class="text-center">
+                            <div class="text-xs text-gray-600 dark:text-gray-400 mb-1" x-text="`E${enchant-1}`"></div>
+                            <template x-for="tier in 8" :key="tier">
+                                <div class="flex items-center justify-center">
+                                    <input type="checkbox" 
+                                           :id="`living_rock_e${enchant-1}_t${tier}`"
+                                           x-model="settings.harvesting_living_rock[`e${enchant-1}`][tier-1]"
+                                           class="rounded border-gray-300 text-brown-600 shadow-sm focus:border-brown-300 focus:ring focus:ring-brown-200 focus:ring-opacity-50">
+                                    <label :for="`living_rock_e${enchant-1}_t${tier}`" class="ml-1 text-xs text-gray-700 dark:text-gray-300" x-text="tier"></label>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('resourcesSettings', () => ({
+        settings: {
+            resource_size: false,
+            living_resources_hp: false,
+            living_resources_id: false,
+            show_fish: false,
+            harvesting_static_fiber: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_static_wood: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_static_hide: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_static_ore: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_static_rock: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_living_fiber: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_living_wood: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_living_hide: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_living_ore: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            },
+            harvesting_living_rock: {
+                'e0': [false, false, false, false, false, false, false, false],
+                'e1': [false, false, false, false, false, false, false, false],
+                'e2': [false, false, false, false, false, false, false, false],
+                'e3': [false, false, false, false, false, false, false, false],
+                'e4': [false, false, false, false, false, false, false, false],
+            }
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

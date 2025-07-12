@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}Ignore List - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="ignoreListSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Ignore List Management
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Manage players and entities to ignore on the radar.
+        </p>
+    </div>
+
+    <!-- Add to Ignore List -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Add to Ignore List
+        </h3>
+        
+        <div class="space-y-4">
+            <!-- Player Name -->
+            <div class="flex items-center space-x-4">
+                <label for="player_name" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Player Name:
+                </label>
+                <input type="text" id="player_name" x-model="newPlayerName" 
+                       placeholder="Enter player name"
+                       class="flex-1 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <button @click="addToIgnoreList()" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Add to Ignore
+                </button>
+            </div>
+
+            <!-- Guild Name -->
+            <div class="flex items-center space-x-4">
+                <label for="guild_name" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Guild Name:
+                </label>
+                <input type="text" id="guild_name" x-model="newGuildName" 
+                       placeholder="Enter guild name"
+                       class="flex-1 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <button @click="addGuildToIgnoreList()" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Add Guild to Ignore
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ignored Players -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Ignored Players
+        </h3>
+        
+        <div class="space-y-2">
+            <template x-for="(player, index) in ignoredPlayers" :key="index">
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                    <span x-text="player" class="text-sm font-medium text-gray-700 dark:text-gray-300"></span>
+                    <button @click="removeFromIgnoreList(index, 'player')" 
+                            class="text-red-600 hover:text-red-800 text-sm font-medium">
+                        Remove
+                    </button>
+                </div>
+            </template>
+            
+            <div x-show="ignoredPlayers.length === 0" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                No players in ignore list
+            </div>
+        </div>
+    </div>
+
+    <!-- Ignored Guilds -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Ignored Guilds
+        </h3>
+        
+        <div class="space-y-2">
+            <template x-for="(guild, index) in ignoredGuilds" :key="index">
+                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                    <span x-text="guild" class="text-sm font-medium text-gray-700 dark:text-gray-300"></span>
+                    <button @click="removeFromIgnoreList(index, 'guild')" 
+                            class="text-red-600 hover:text-red-800 text-sm font-medium">
+                        Remove
+                    </button>
+                </div>
+            </template>
+            
+            <div x-show="ignoredGuilds.length === 0" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                No guilds in ignore list
+            </div>
+        </div>
+    </div>
+
+    <!-- Ignore Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Ignore Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Ignore Passive Players -->
+            <div class="flex items-center">
+                <input type="checkbox" id="ignore_passive_players" x-model="settings.ignore_passive_players" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="ignore_passive_players" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ignore Passive Players
+                </label>
+            </div>
+
+            <!-- Ignore Faction Players -->
+            <div class="flex items-center">
+                <input type="checkbox" id="ignore_faction_players" x-model="settings.ignore_faction_players" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="ignore_faction_players" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ignore Faction Players
+                </label>
+            </div>
+
+            <!-- Ignore Guild Members -->
+            <div class="flex items-center">
+                <input type="checkbox" id="ignore_guild_members" x-model="settings.ignore_guild_members" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="ignore_guild_members" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ignore Guild Members
+                </label>
+            </div>
+
+            <!-- Ignore Alliance Members -->
+            <div class="flex items-center">
+                <input type="checkbox" id="ignore_alliance_members" x-model="settings.ignore_alliance_members" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="ignore_alliance_members" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Ignore Alliance Members
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('ignoreListSettings', () => ({
+        newPlayerName: '',
+        newGuildName: '',
+        ignoredPlayers: [],
+        ignoredGuilds: [],
+        settings: {
+            ignore_passive_players: false,
+            ignore_faction_players: false,
+            ignore_guild_members: false,
+            ignore_alliance_members: false
+        },
+
+        init() {
+            this.loadSettings();
+            this.loadIgnoreLists();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async loadIgnoreLists() {
+            try {
+                const response = await fetch('/api/ignore-list');
+                const data = await response.json();
+                
+                this.ignoredPlayers = data.players || [];
+                this.ignoredGuilds = data.guilds || [];
+            } catch (error) {
+                console.error('Error loading ignore lists:', error);
+            }
+        },
+
+        async addToIgnoreList() {
+            if (!this.newPlayerName.trim()) return;
+            
+            try {
+                const response = await fetch('/api/ignore-list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'player',
+                        name: this.newPlayerName.trim()
+                    })
+                });
+
+                if (response.ok) {
+                    this.ignoredPlayers.push(this.newPlayerName.trim());
+                    this.newPlayerName = '';
+                    alert('Player added to ignore list');
+                } else {
+                    alert('Error adding player to ignore list');
+                }
+            } catch (error) {
+                console.error('Error adding to ignore list:', error);
+                alert('Error adding to ignore list');
+            }
+        },
+
+        async addGuildToIgnoreList() {
+            if (!this.newGuildName.trim()) return;
+            
+            try {
+                const response = await fetch('/api/ignore-list', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'guild',
+                        name: this.newGuildName.trim()
+                    })
+                });
+
+                if (response.ok) {
+                    this.ignoredGuilds.push(this.newGuildName.trim());
+                    this.newGuildName = '';
+                    alert('Guild added to ignore list');
+                } else {
+                    alert('Error adding guild to ignore list');
+                }
+            } catch (error) {
+                console.error('Error adding to ignore list:', error);
+                alert('Error adding to ignore list');
+            }
+        },
+
+        async removeFromIgnoreList(index, type) {
+            try {
+                const response = await fetch('/api/ignore-list', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        index: index
+                    })
+                });
+
+                if (response.ok) {
+                    if (type === 'player') {
+                        this.ignoredPlayers.splice(index, 1);
+                    } else {
+                        this.ignoredGuilds.splice(index, 1);
+                    }
+                    alert('Removed from ignore list');
+                } else {
+                    alert('Error removing from ignore list');
+                }
+            } catch (error) {
+                console.error('Error removing from ignore list:', error);
+                alert('Error removing from ignore list');
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 

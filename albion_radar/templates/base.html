@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Albion Radar{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Socket.IO -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+    </style>
+    
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+                            Albion Radar
+                        </h1>
+                    </div>
+                    
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="/home" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Players
+                        </a>
+                        <a href="/resources" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Resources
+                        </a>
+                        <a href="/enemies" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Enemies
+                        </a>
+                        <a href="/chests" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Chests
+                        </a>
+                        <a href="/map" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Map
+                        </a>
+                        <a href="/ignorelist" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Ignore List
+                        </a>
+                        <a href="/settings" class="text-gray-900 dark:text-white hover:text-gray-500 dark:hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium">
+                            Settings
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Theme toggle -->
+                    <button @click="dark = !dark" class="p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                        <svg x-show="!dark" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                        <svg x-show="dark" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Radar status -->
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 rounded-full" :class="radarRunning ? 'bg-green-500' : 'bg-red-500'"></div>
+                        <span class="text-sm text-gray-500 dark:text-gray-400" x-text="radarRunning ? 'Running' : 'Stopped'"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- JavaScript -->
+    <script>
+        // Initialize Alpine.js data
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('radarApp', () => ({
+                dark: localStorage.getItem('dark') === 'true',
+                radarRunning: false,
+                selectedAdapter: null,
+                adapters: [],
+                
+                init() {
+                    this.loadStatus();
+                    this.loadAdapters();
+                    
+                    // Watch for dark mode changes
+                    this.$watch('dark', value => {
+                        localStorage.setItem('dark', value);
+                        if (value) {
+                            document.documentElement.classList.add('dark');
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                        }
+                    });
+                    
+                    // Initialize dark mode
+                    if (this.dark) {
+                        document.documentElement.classList.add('dark');
+                    }
+                },
+                
+                async loadStatus() {
+                    try {
+                        const response = await fetch('/api/status');
+                        const data = await response.json();
+                        this.radarRunning = data.running;
+                        this.selectedAdapter = data.adapter;
+                    } catch (error) {
+                        console.error('Error loading status:', error);
+                    }
+                },
+                
+                async loadAdapters() {
+                    try {
+                        const response = await fetch('/api/adapters');
+                        const data = await response.json();
+                        this.adapters = data.adapters;
+                        this.selectedAdapter = data.selected;
+                    } catch (error) {
+                        console.error('Error loading adapters:', error);
+                    }
+                },
+                
+                async startRadar() {
+                    if (!this.selectedAdapter) {
+                        alert('Please select a network adapter first');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('/api/start', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                adapter: this.selectedAdapter
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            this.radarRunning = true;
+                            this.showMessage('Radar started successfully', 'success');
+                        } else {
+                            this.showMessage(data.message, 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error starting radar:', error);
+                        this.showMessage('Error starting radar', 'error');
+                    }
+                },
+                
+                async stopRadar() {
+                    try {
+                        const response = await fetch('/api/stop', {
+                            method: 'POST'
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            this.radarRunning = false;
+                            this.showMessage('Radar stopped successfully', 'success');
+                        } else {
+                            this.showMessage(data.message, 'error');
+                        }
+                    } catch (error) {
+                        console.error('Error stopping radar:', error);
+                        this.showMessage('Error stopping radar', 'error');
+                    }
+                },
+                
+                showMessage(message, type) {
+                    // Simple message display - can be enhanced with a toast library
+                    alert(message);
+                }
+            }));
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

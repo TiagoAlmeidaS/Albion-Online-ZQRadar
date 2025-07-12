@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Enemies - Albion Radar{% endblock %}
+
+{% block content %}
+<div x-data="enemiesSettings" class="space-y-6">
+    <!-- Header -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Enemies Settings
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400">
+            Configure enemy mob display settings for the radar.
+        </p>
+    </div>
+
+    <!-- Enemy Level Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Enemy Level Filters
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <template x-for="level in 5" :key="level">
+                <div class="flex items-center">
+                    <input type="checkbox" :id="`enemy_level_${level}`" 
+                           x-model="settings.enemy_levels[level-1]"
+                           class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                    <label :for="`enemy_level_${level}`" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300" x-text="`Level ${level}`"></label>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Enemy Display Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Enemy Display Options
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Enemy Health -->
+            <div class="flex items-center">
+                <input type="checkbox" id="enemies_hp" x-model="settings.enemies_hp" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="enemies_hp" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Enemy Health
+                </label>
+            </div>
+
+            <!-- Enemy ID -->
+            <div class="flex items-center">
+                <input type="checkbox" id="enemies_id" x-model="settings.enemies_id" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="enemies_id" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Enemy Names
+                </label>
+            </div>
+
+            <!-- Minimum Health Filter -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_minimum_health_enemies" x-model="settings.show_minimum_health_enemies" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_minimum_health_enemies" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Filter by Minimum Health
+                </label>
+            </div>
+
+            <!-- Minimum Health Value -->
+            <div class="flex items-center space-x-2">
+                <label for="minimum_health_enemies" class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Min Health:
+                </label>
+                <input type="number" id="minimum_health_enemies" x-model="settings.minimum_health_enemies" min="0" max="10000"
+                       class="w-20 rounded border-gray-300 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+    </div>
+
+    <!-- Special Enemy Types -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Special Enemy Types
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Avalone Drones -->
+            <div class="flex items-center">
+                <input type="checkbox" id="avalone_drones" x-model="settings.avalone_drones" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="avalone_drones" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Avalone Drones
+                </label>
+            </div>
+
+            <!-- Unmanaged Enemies -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_unmanaged_enemies" x-model="settings.show_unmanaged_enemies" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_unmanaged_enemies" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Unmanaged Enemies
+                </label>
+            </div>
+
+            <!-- Event Enemies -->
+            <div class="flex items-center">
+                <input type="checkbox" id="show_event_enemies" x-model="settings.show_event_enemies" 
+                       class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                <label for="show_event_enemies" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Show Event Enemies
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boss Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Boss Settings
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Crystal Spider -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boss_crystal_spider" x-model="settings.boss_crystal_spider" 
+                       class="rounded border-gray-300 text-pink-600 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50">
+                <label for="boss_crystal_spider" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Crystal Spider
+                </label>
+            </div>
+
+            <!-- Fairy Dragon -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boss_fairy_dragon" x-model="settings.boss_fairy_dragon" 
+                       class="rounded border-gray-300 text-green-600 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50">
+                <label for="boss_fairy_dragon" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Fairy Dragon
+                </label>
+            </div>
+
+            <!-- Veil Weaver -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boss_veil_weaver" x-model="settings.boss_veil_weaver" 
+                       class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50">
+                <label for="boss_veil_weaver" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Veil Weaver
+                </label>
+            </div>
+
+            <!-- Griffin -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boss_griffin" x-model="settings.boss_griffin" 
+                       class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50">
+                <label for="boss_griffin" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Griffin
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Button -->
+    <div class="flex justify-end">
+        <button @click="saveSettings()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Save Settings
+        </button>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('enemiesSettings', () => ({
+        settings: {
+            enemy_levels: [false, false, false, false, false],
+            enemies_hp: false,
+            enemies_id: false,
+            show_minimum_health_enemies: false,
+            minimum_health_enemies: 2100,
+            avalone_drones: false,
+            show_unmanaged_enemies: false,
+            show_event_enemies: false,
+            boss_crystal_spider: false,
+            boss_fairy_dragon: false,
+            boss_veil_weaver: false,
+            boss_griffin: false
+        },
+
+        init() {
+            this.loadSettings();
+        },
+
+        async loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const data = await response.json();
+                
+                // Update settings with loaded data
+                Object.keys(this.settings).forEach(key => {
+                    if (data[key] !== undefined) {
+                        this.settings[key] = data[key];
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        },
+
+        async saveSettings() {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(this.settings)
+                });
+
+                if (response.ok) {
+                    alert('Settings saved successfully!');
+                } else {
+                    alert('Error saving settings');
+                }
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                alert('Error saving settings');
+            }
+        }
+    }));
+});
+</script>
+{% endblock %} 
